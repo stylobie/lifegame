@@ -1,3 +1,7 @@
+import tkinter as tk
+
+
+
 def creerLigneGrille(nombreColonnes) :
     return [0 for i in range(nombreColonnes)]
 
@@ -63,6 +67,7 @@ def donneGenerationSuivante(grille) :
                 setValeur(nouvelleGeneration, ligne, colonne, nouvelleValeur)
     return nouvelleGeneration
             
+
 def pg(grille) :
     nombreColonnes= donneNombreColonnes(grille)
     nombreLignes = donneNombreLignes(grille)
@@ -77,30 +82,45 @@ def pg(grille) :
         s= s + '\n' 
         print(s)
 
-
-
-
-
-
-
-
+def initialiserGrille(grille) :
+    nombreColonnes= donneNombreColonnes(grille)
+    nombreLignes = donneNombreLignes(grille)
+    base = tk.Tk()
+    fenetre = tk.Frame(base)
+    marge = 0
+    margeGrille = 0
+    largeurGrille = 500 
+    hauteurGrille = 500
+    grosseurTrait = 1
+    fenetre.pack(side="top", fill="both", expand=True, padx=marge, pady = marge)
+    canvas = tk.Canvas(fenetre, width=largeurGrille + margeGrille + grosseurTrait,
+                                height=hauteurGrille + margeGrille + grosseurTrait, background="white")
+    canvas.pack(side="top", anchor="c")
+    for i in range(nombreColonnes + 1) :
+        xLigne = (i * largeurGrille) / nombreColonnes + grosseurTrait + 1
+        canvas.create_line(xLigne, 0, xLigne, hauteurGrille + grosseurTrait, width = grosseurTrait, fill="black")
+    for i in range(nombreLignes + 1) :
+        yLigne = (i * hauteurGrille) / nombreLignes + grosseurTrait + 1
+        canvas.create_line(0, yLigne, largeurGrille + grosseurTrait, yLigne, width = grosseurTrait, fill="black")
+    for ligne in range(nombreLignes) :
+        for colonne in range(nombreColonnes) :
+            if grille[ligne][colonne] == 1 :
+                canvas.create_rectangle((ligne*largeurGrille)/nombreColonnes + grosseurTrait, (colonne*hauteurGrille)/nombreLignes + grosseurTrait, ((ligne +1)*largeurGrille)/nombreColonnes + 1, ((colonne + 1)*hauteurGrille)/nombreLignes + 1, fill="black", tags="square")
+        
+    base.mainloop()
 
 m = creerGrille(10, 10)
+creerCellule(m, 2, 3) 
+creerCellule(m, 2, 4)
+creerCellule(m, 2, 5)
+initialiserGrille(m)
+
+
+
+"""m = creerGrille(10, 10)
 creerCellule(m, 2, 3) ;
 creerCellule(m, 2, 4)
 creerCellule(m, 2, 5) ;
 creerCellule(m, 2, 5)
-pg(m)
-print(compterLesVoisins(m, 1, 4))
 m = donneGenerationSuivante(m)
-pg(m)
-m = donneGenerationSuivante(m)
-pg(m)
-m = donneGenerationSuivante(m)
-pg(m)
-m = donneGenerationSuivante(m)
-pg(m)
-m = donneGenerationSuivante(m)
-pg(m)
-m = donneGenerationSuivante(m)
-pg(m)
+pg(m)"""
