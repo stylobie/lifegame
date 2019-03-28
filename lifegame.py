@@ -57,7 +57,7 @@ class Grille :
         for position in positionsInteressantes:
             nombreCellulesVivantesVoisines = self.compterLesVoisins(position)
             if nombreCellulesVivantesVoisines < 2 or nombreCellulesVivantesVoisines > 3 :
-                # rien Ã  faire car la nouvelle grille est vide au dÃ©part
+                # rien à faire car la nouvelle grille est vide au départ
                 pass
             elif nombreCellulesVivantesVoisines  == 3 :
                 generationSuivante.ajouterCellule(position)
@@ -137,7 +137,7 @@ def setValeur(grille, x, y, valeur) :
     if estDansLaGrille(grille, x, y) :
         grille[x][y] = valeur
     else :
-        raise IndexError('coordonnÃ©es invalides')
+        raise IndexError('coordonnées invalides')
     
     
 def creerCellule(grille, x, y) :
