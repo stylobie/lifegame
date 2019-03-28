@@ -1,5 +1,113 @@
 import tkinter as tk
 
+class Position :
+    def __init__(self, x, y) :
+        self.x = x
+        self.y = y
+
+    def __repr__(self) :
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
+
+    def __eq__(self, autreObjet):
+        return self.x == autreObjet.x and self.y == autreObjet.y
+
+class Grille :
+    def __init__(self, nombreLignes, nombreColonnes):
+        self.nombreLignes = nombreLignes
+        self.nombreColonnes = nombreColonnes
+        self.cellules = []
+
+    def __repr__(self):
+        return self.cellules.__repr__()
+    
+    def ajouterCellule(self, position):
+        if not (position in self.cellules):
+            self.cellules.append(position)
+
+    def ajouterCellules(self, positions):
+        self.cellules += positions
+    
+    def supprimerCellule(self, position) :
+        if position in self.cellules:
+            self.cellules.remove(position)
+            
+    def estCelluleVivante(self, position) :
+        return position in self.cellules
+            
+    def compterLesVoisins(self, position) :
+        compteur = 0
+        for ligne in range(position.x - 1, position.x + 2):
+            for colonne in range(position.y - 1, position.y + 2) :
+                #if not(ligne==position.x and colonne==position.y):
+                positionVoisine = Position(ligne, colonne)
+                if self.estCelluleVivante(positionVoisine) :
+                    compteur += 1
+        return compteur 
+    
+    def donnerGenerationSuivante(self) :
+        generationSuivante = Grille(self.nombreLignes, self.nombreColonnes)
+        positionsInteressantes = []
+        for position in self.cellules :
+            for ligne in range(position.x - 1, position.x + 2):
+                for colonne in range(position.y - 1, position.y + 2) :
+                    positionInteresante = Position(ligne, colonne)
+                if not(positionInteresante in positionsInteressantes) :
+                    positionsInteressantes += [positionInteresante]
+        
+        for position in positionsInteressantes:
+            nombreCellulesVivantesVoisines = self.compterLesVoisins(position)
+            if nombreCellulesVivantesVoisines < 2 or nombreCellulesVivantesVoisines > 3 :
+                # rien à faire car la nouvelle grille est vide au départ
+                pass
+            elif nombreCellulesVivantesVoisines  == 3 :
+                generationSuivante.ajouterCellule(position)
+            elif self.estCelluleVivante(position) :
+                generationSuivante.ajouterCellule(position)
+        return generationSuivante
+
+
+def initialiserGrille1(grille) :
+    nombreColonnes = grille.nombreColonnes
+    nombreLignes = grille.nombreLignes
+    base = tk.Tk()
+    fenetre = tk.Frame(base)
+    marge = 0
+    margeGrille = 0
+    largeurGrille = 500 
+    hauteurGrille = 500
+    grosseurTrait = 1
+    fenetre.pack(side="top", fill="both", expand=True, padx=marge, pady = marge)
+    canvas = tk.Canvas(fenetre, width=largeurGrille + margeGrille + grosseurTrait,
+                                height=hauteurGrille + margeGrille + grosseurTrait, background="white")
+    canvas.pack(side="top", anchor="c")
+    
+    for i in range(nombreColonnes + 1) :
+        xLigne = (i * largeurGrille) / nombreColonnes + grosseurTrait + 1
+        canvas.create_line(xLigne, 0, xLigne, hauteurGrille + grosseurTrait, width = grosseurTrait, fill="black")
+    for i in range(nombreLignes + 1) :
+        yLigne = (i * hauteurGrille) / nombreLignes + grosseurTrait + 1
+        canvas.create_line(0, yLigne, largeurGrille + grosseurTrait, yLigne, width = grosseurTrait, fill="black")
+    
+    for ligne in range(nombreLignes) :
+        for colonne in range(nombreColonnes) :
+            cellule = Position(ligne, colonne)
+            if cellule in grille.cellules:
+                canvas.create_rectangle((ligne*largeurGrille)/nombreColonnes + grosseurTrait, (colonne*hauteurGrille)/nombreLignes + grosseurTrait, ((ligne +1)*largeurGrille)/nombreColonnes + 1, ((colonne + 1)*hauteurGrille)/nombreLignes + 1, fill="black", tags="square")
+        
+    base.mainloop()        
+count = 5
+c = Position(2, 2)
+d = Position(2, 3)
+e = Position(2, 4)
+
+g = Grille(10, 10)
+g.ajouterCellule(c)
+g.ajouterCellules([d, e])
+initialiserGrille1(g)
+for i in range(count):
+    g = g.donnerGenerationSuivante()
+    initialiserGrille1(g)
+
 
 
 def creerLigneGrille(nombreColonnes) :
@@ -113,7 +221,7 @@ m = creerGrille(10, 10)
 creerCellule(m, 2, 3) 
 creerCellule(m, 2, 4)
 creerCellule(m, 2, 5)
-initialiserGrille(m)
+# initialiserGrille(m)
 
 
 
