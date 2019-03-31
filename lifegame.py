@@ -77,18 +77,12 @@ class Grille:
         return generationSuivante
 
 
-# def play(grila):
-#     while True :
-#         deseneaza(grila)
-#         grila = grila.donnerGenerationSuivante()
-#         if stopRequested:
-#             break
 count = 5
 c = Position(2, 2)
 d = Position(2, 3)
 e = Position(2, 4)
 
-g = Grille(10, 10)
+g = Grille(500, 500)
 g.ajouterCellule(c)
 g.ajouterCellules([d, e])
 
@@ -106,19 +100,16 @@ canvas.pack(side="top", anchor="c")
 
 arretDemande = False
 
+def donnerPositionBasDroite(grille, largeurDessin, hauteurDessin, colTopGauche, ligneTopGauche, echelleEnPixPerCellule):
 
 def dessiner(grille, canvas, largeurGrille, hauteurGrille, grosseurTrait):
     nombreColonnes = grille.nombreColonnes
     nombreLignes = grille.nombreLignes
     grosseurTrait = 1
     canvas.delete("cellule")
-    for ligne in range(nombreLignes):
-        for colonne in range(nombreColonnes):
-            position = Position(ligne, colonne)
-            if grille.estCelluleVivante(position):
-                canvas.create_rectangle((ligne*largeurGrille)/nombreColonnes + grosseurTrait, (colonne*hauteurGrille)/nombreLignes + grosseurTrait, ((
-                    ligne + 1)*largeurGrille)/nombreColonnes + 1, ((colonne + 1)*hauteurGrille)/nombreLignes + 1, fill="black", tags="cellule")
-
+    for position in grille.cellules:
+        canvas.create_rectangle((position.y*largeurGrille)/nombreColonnes + grosseurTrait, (position.x*hauteurGrille)/nombreLignes + grosseurTrait, ((
+                    position.y + 1)*largeurGrille)/nombreColonnes + 1, ((position.x + 1)*hauteurGrille)/nombreLignes + 1, fill="black", tags="cellule")
 
 def lancer():
     global arretDemande
@@ -144,12 +135,12 @@ nombreColonnes = g.nombreColonnes
 nombreLignes = g.nombreLignes
 for i in range(nombreColonnes + 1):
     xLigne = (i * largeurGrille) / nombreColonnes + grosseurTrait + 1
-    canvas.create_line(xLigne, 0, xLigne, hauteurGrille +
-                       grosseurTrait, width=grosseurTrait, fill="black")
+    # canvas.create_line(xLigne, 0, xLigne, hauteurGrille +
+    #                   grosseurTrait, width=grosseurTrait, fill="black")
 for i in range(nombreLignes + 1):
     yLigne = (i * hauteurGrille) / nombreLignes + grosseurTrait + 1
-    canvas.create_line(0, yLigne, largeurGrille + grosseurTrait,
-                       yLigne, width=grosseurTrait, fill="black")
+    # canvas.create_line(0, yLigne, largeurGrille + grosseurTrait,
+    #                   yLigne, width=grosseurTrait, fill="black")
     dessiner(g, canvas, largeurGrille, hauteurGrille, grosseurTrait)
 
 base.mainloop()
